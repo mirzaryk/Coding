@@ -1,0 +1,168 @@
+.draw-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.draw-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.draw-card.no-draw {
+  text-align: center;
+  padding: 30px;
+  background-color: #f9f9f9;
+}
+
+.draw-card-header {
+  background-color: #6a1b9a;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.draw-card-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.draw-status {
+  background-color: #4caf50;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.draw-status:contains('Paused') {
+  background-color: #ff9800;
+}
+
+.draw-paused-message {
+  color: #ff9800;
+  font-style: italic;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.draw-card-body {
+  padding: 20px;
+}
+
+.draw-info p {
+  margin: 10px 0;
+  font-size: 1rem;
+}
+
+.prize-breakdown {
+  margin-top: 20px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.prize-breakdown h4 {
+  margin-bottom: 15px;
+  color: #6a1b9a;
+}
+
+.prize-breakdown ul {
+  list-style: none;
+  padding: 0;
+}
+
+.prize-breakdown li {
+  margin-bottom: 10px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.prize-breakdown li:before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #f50057;
+}
+
+.prize-pool-note {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 10px;
+  border-top: 1px dashed #eee;
+  padding-top: 10px;
+}
+
+.draw-card-footer {
+  padding: 15px 20px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.enter-draw-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.entry-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.entry-count-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.entry-count-container label {
+  font-weight: 500;
+  color: #555;
+}
+
+.entry-count-input {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.entry-count-input input {
+  width: 80px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.entry-fee-total {
+  font-weight: bold;
+  color: #6a1b9a;
+}
+
+@media screen and (max-width: 768px) {
+  .draw-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .draw-status {
+    margin-top: 10px;
+  }
+  
+  .entry-count-input {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

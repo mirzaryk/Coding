@@ -1,0 +1,119 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Check if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Check if the user is the owner of a document
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    // Check if a user is an admin
+    function isAdmin() {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (isOwner(userId) || isAdmin());
+      allow create: if isAuthenticated() && isOwner(userId);
+      // Allow updates from anyone if they're an admin (for prize crediting)
+      allow update: if isAuthenticated() && (isOwner(userId) || isAdmin());
+      allow delete: if isAdmin();
+    }
+    
+    // Entries collection
+    match /entries/{entryId} {
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid || isAdmin()
+      );
+      // Allow any authenticated user to create entries
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
+    }
+    
+    // Draws collection
+    match /draws/{drawId} {
+      // Anyone can read draw data
+      allow read: if true;
+      // Only admins can create draws
+      allow create: if isAdmin();
+      // For updates, allow both admins and authenticated users to update winners array
+      allow update: if isAdmin() || 
+        (isAuthenticated() && (
+          // Allow updates for entries and participants counts
+          (request.resource.data.entries > resource.data.entries &&
+           request.resource.data.participants > resource.data.participants &&
+           request.resource.data.diff(resource.data).affectedKeys().hasOnly(['entries', 'participants', 'updatedAt']))
+          ||
+          // Allow updates for winners array for claiming prizes
+          (request.auth != null && 
+           request.resource.data.diff(resource.data).affectedKeys().hasOnly(['winners', 'updatedAt']))
+        ));
+      allow delete: if isAdmin();
+    }
+    
+    // Winners collection - Add new rule
+    match /winners/{winnerId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // Transactions collection
+    match /transactions/{transactionId} {
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid || isAdmin()
+      );
+      // Allow admins to create transactions for winners without restrictions
+      allow create: if isAuthenticated() && (
+        request.resource.data.userId == request.auth.uid || isAdmin()
+      );
+      allow update, delete: if isAdmin();
+    }
+    
+    // System logs - new collection for debugging
+    match /systemLogs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
+    }
+
+    match /winnerLogs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
+    }
+    
+    // Notifications collection
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid
+      );
+      // Allow admins to create notifications for winners
+      allow create: if isAuthenticated() && (
+        request.resource.data.userId == request.auth.uid || isAdmin()
+      );
+      allow update, delete: if isAdmin();
+    }
+
+    // Add a new collection for transaction logs
+    match /transactionLogs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin();
+      allow update, delete: if isAdmin();
+    }
+
+    // For the adminNotifications collection
+    match /adminNotifications/{notificationId} {
+      allow read: if isAdmin();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
+    }
+  }
+}

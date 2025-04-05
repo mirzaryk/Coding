@@ -1,0 +1,160 @@
+/* Styles for AdminWinners component */
+
+.winners-list .admin-table {
+  table-layout: fixed;
+}
+
+.winner-position-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.winner-position-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  background-color: #6a1b9a;
+}
+
+tr:has([data-position="1"]) .winner-position-badge {
+  background-color: #FFD700; /* Gold */
+}
+
+tr:has([data-position="2"]) .winner-position-badge {
+  background-color: #C0C0C0; /* Silver */
+}
+
+tr:has([data-position="3"]) .winner-position-badge {
+  background-color: #CD7F32; /* Bronze */
+}
+
+.winner-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #6a1b9a;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.winner-user-name {
+  font-weight: 500;
+}
+
+.winner-unknown-user {
+  color: #999;
+  font-style: italic;
+}
+
+.winner-prize {
+  font-weight: bold;
+  color: #4caf50;
+}
+
+.status-badge.status-unclaimed {
+  background-color: #f5f5f5;
+  color: #888;
+}
+
+/* Inline details styling */
+.details-row {
+  background-color: #f9f9f9;
+}
+
+.details-cell {
+  padding: 0 !important;
+}
+
+.winner-detail-panel {
+  border-top: 1px solid #eee;
+  border-bottom: 2px solid #6a1b9a;
+}
+
+.winner-detail-content {
+  padding: 20px;
+}
+
+.winner-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  color: #6a1b9a;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.section-icon {
+  font-size: 1rem;
+}
+
+.winner-info-grid, .user-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.info-item {
+  margin-bottom: 10px;
+}
+
+.info-label {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 3px;
+}
+
+.info-value {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.info-icon {
+  color: #6a1b9a;
+  font-size: 0.9rem;
+}
+
+.prize-value {
+  color: #4caf50;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.no-user-data {
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 6px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+@media (max-width: 992px) {
+  .winner-sections {
+    grid-template-columns: 1fr;
+  }
+}

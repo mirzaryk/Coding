@@ -1,0 +1,24 @@
+.admin-back-button {
+  margin-bottom: 20px;
+}
+
+.admin-back-button .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #f5f0ff;
+  color: #6a1b9a;
+  border: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.admin-back-button .btn:hover {
+  background-color: #e9dcff;
+  transform: translateX(-5px);
+}
+
+.icon-margin-right {
+  margin-right: 5px;
+}
