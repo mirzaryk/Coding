@@ -19,19 +19,19 @@
   justify-content: center;
   font-weight: bold;
   color: white;
-  background-color: #6a1b9a;
+  background-color: #1D2671; /* Changed to primary blue */
 }
 
 tr:has([data-position="1"]) .winner-position-badge {
-  background-color: #FFD700; /* Gold */
+  background-color: #C33764; /* Keep Gold */
 }
 
 tr:has([data-position="2"]) .winner-position-badge {
-  background-color: #C0C0C0; /* Silver */
+  background-color: #C0C0C0; /* Keep Silver */
 }
 
 tr:has([data-position="3"]) .winner-position-badge {
-  background-color: #CD7F32; /* Bronze */
+  background-color: #CD7F32; /* Keep Bronze */
 }
 
 .winner-user-cell {
@@ -44,7 +44,7 @@ tr:has([data-position="3"]) .winner-position-badge {
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  background-color: #6a1b9a;
+  background-color: #1D2671; /* Changed to primary blue */
   color: white;
   display: flex;
   align-items: center;
@@ -63,7 +63,7 @@ tr:has([data-position="3"]) .winner-position-badge {
 
 .winner-prize {
   font-weight: bold;
-  color: #4caf50;
+  color: #C33764; /* Keep green for prize amounts */
 }
 
 .status-badge.status-unclaimed {
@@ -82,7 +82,7 @@ tr:has([data-position="3"]) .winner-position-badge {
 
 .winner-detail-panel {
   border-top: 1px solid #eee;
-  border-bottom: 2px solid #6a1b9a;
+  border-bottom: 2px solid #1D2671; /* Changed to primary blue */
 }
 
 .winner-detail-content {
@@ -100,7 +100,7 @@ tr:has([data-position="3"]) .winner-position-badge {
   align-items: center;
   gap: 8px;
   font-size: 1.1rem;
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
   margin-bottom: 15px;
   padding-bottom: 8px;
   border-bottom: 1px solid #eee;
@@ -134,12 +134,12 @@ tr:has([data-position="3"]) .winner-position-badge {
 }
 
 .info-icon {
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
   font-size: 0.9rem;
 }
 
 .prize-value {
-  color: #4caf50;
+  color: #C33764; /* Keep green for prize amounts */
   font-weight: bold;
   font-size: 1.1rem;
 }

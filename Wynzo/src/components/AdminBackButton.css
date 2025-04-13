@@ -7,15 +7,16 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background-color: #f5f0ff;
-  color: #6a1b9a;
+  background: linear-gradient(135deg, #C33764 , #1D2671);  /* Lighter shade of primary blue */
+  color: #ffffff;             /* Primary blue */
   border: none;
   font-weight: 500;
   transition: all 0.3s ease;
 }
 
 .admin-back-button .btn:hover {
-  background-color: #e9dcff;
+  background: linear-gradient(135deg, rgba(195, 55, 100, 1), rgba(29, 38, 113, 1));  /* Slightly darker shade for hover */
+  color: #ffffff;      /* Darker shade of primary blue */
   transform: translateX(-5px);
 }
 

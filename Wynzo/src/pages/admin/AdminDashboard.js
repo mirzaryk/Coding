@@ -4,7 +4,7 @@ import { collection, query, where, orderBy, limit, getDocs, getDoc, doc } from '
 import { db } from '../../firebase';
 import { useDraw } from '../../contexts/DrawContext';
 import '../Admin.css';
-import { FaUsers, FaTrophy, FaCalendarAlt, FaChartLine } from 'react-icons/fa';
+import { FaUsers, FaTrophy, FaCalendarAlt, FaChartLine, FaUserPlus } from 'react-icons/fa';
 
 function AdminDashboard() {
   const { currentDraw } = useDraw();
@@ -14,11 +14,13 @@ function AdminDashboard() {
     totalDraws: 0,
     completedDraws: 0,
     totalEntries: 0,
-    totalPrizesAwarded: 0
+    totalPrizesAwarded: 0,
+    totalReferrals: 0
   });
   const [recentUsers, setRecentUsers] = useState([]);
   const [recentWinners, setRecentWinners] = useState([]);
   const [pendingDeposits, setPendingDeposits] = useState([]);
+  const [recentReferrals, setRecentReferrals] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -62,6 +64,11 @@ function AdminDashboard() {
             });
           }
         });
+
+        // Fetch referral statistics
+        const referralsQuery = query(collection(db, 'referrals'));
+        const referralsSnapshot = await getDocs(referralsQuery);
+        const totalReferrals = referralsSnapshot.size;
         
         // Set the statistics
         setStats({
@@ -70,7 +77,8 @@ function AdminDashboard() {
           totalDraws,
           completedDraws,
           totalEntries,
-          totalPrizesAwarded
+          totalPrizesAwarded,
+          totalReferrals
         });
         
         // Fetch recent users
@@ -169,6 +177,48 @@ function AdminDashboard() {
     fetchPendingDeposits();
   }, []);
 
+  useEffect(() => {
+    const fetchRecentReferrals = async () => {
+      try {
+        const referralsQuery = query(
+          collection(db, 'referrals'),
+          orderBy('createdAt', 'desc'),
+          limit(5)
+        );
+        
+        const querySnapshot = await getDocs(referralsQuery);
+        const referralsData = [];
+        
+        for (const docSnapshot of querySnapshot.docs) {
+          const referralData = {
+            id: docSnapshot.id,
+            ...docSnapshot.data()
+          };
+          
+          // Get referrer info
+          try {
+            if (referralData.referrerId) {
+              const referrerSnap = await getDoc(doc(db, 'users', referralData.referrerId));
+              if (referrerSnap.exists()) {
+                referralData.referrer = referrerSnap.data();
+              }
+            }
+          } catch (error) {
+            console.error(`Error fetching referrer data for referral ${docSnapshot.id}:`, error);
+          }
+          
+          referralsData.push(referralData);
+        }
+        
+        setRecentReferrals(referralsData);
+      } catch (error) {
+        console.error("Error fetching recent referrals:", error);
+      }
+    };
+    
+    fetchRecentReferrals();
+  }, []);
+
   // Helper to format date
   const formatDate = (timestamp) => {
     if (!timestamp) return 'N/A';
@@ -204,16 +254,18 @@ function AdminDashboard() {
         <div className="admin-header">
           <h1 className="admin-title">Admin Dashboard</h1>
           <div className="admin-actions">
-            <Link to="/admin/draws" className="btn btn-primary">
+            <Link to="/admin/draws" className="btn btn-primary admin-btn">
               Manage Draws
             </Link>
-            <Link to="/admin/tasks" className="btn btn-outline">
+            <Link to="/admin/tasks" className="btn btn-outline admin-btn">
               Manage Tasks
             </Link>
-            <Link to="/admin/claims" className="btn btn-outline">
+            <Link to="/admin/claims" className="btn btn-outline admin-btn">
               Prize Claims
             </Link>
-          
+            <Link to="/admin/referrals" className="btn btn-outline admin-btn">
+              Referrals
+            </Link>
           </div>
         </div>
         
@@ -259,6 +311,17 @@ function AdminDashboard() {
               <h3>Prizes Awarded</h3>
               <p className="stat-value">{formatCurrency(stats.totalPrizesAwarded)}</p>
               <p className="stat-detail">Across {stats.completedDraws} Draws</p>
+            </div>
+          </div>
+
+          <div className="admin-stat-card">
+            <div className="stat-icon">
+              <FaUserPlus />
+            </div>
+            <div className="stat-content">
+              <h3>Referrals</h3>
+              <p className="stat-value">{stats.totalReferrals}</p>
+              <p className="stat-detail">Program Growth</p>
             </div>
           </div>
         </div>
@@ -312,7 +375,7 @@ function AdminDashboard() {
                 </div>
                 
                 <div className="admin-draw-actions">
-                  <Link to="/admin/draws" className="btn btn-primary">
+                  <Link to="/admin/draws" className="btn btn-primary admin-btn center-btn">
                     Manage This Draw
                   </Link>
                 </div>
@@ -348,7 +411,7 @@ function AdminDashboard() {
                       </div>
                     </div>
                     <div className="admin-list-actions">
-                      <Link to={`/admin/users?id=${user.id}`} className="btn btn-outline btn-sm">
+                      <Link to={`/admin/users?id=${user.id}`} className="btn btn-outline btn-sm admin-btn">
                         View
                       </Link>
                     </div>
@@ -419,7 +482,7 @@ function AdminDashboard() {
                     </div>
                     <div className="admin-list-amount">{formatCurrency(deposit.amount)}</div>
                     <div className="admin-list-actions">
-                      <Link to={`/admin/deposits?id=${deposit.id}`} className="btn btn-sm btn-primary">
+                      <Link to={`/admin/deposits?id=${deposit.id}`} className="btn btn-sm btn-primary admin-btn">
                         Review
                       </Link>
                     </div>
@@ -429,6 +492,45 @@ function AdminDashboard() {
             ) : (
               <div className="admin-no-data">
                 <p>No pending deposit requests</p>
+              </div>
+            )}
+          </div>
+
+          <div className="admin-section">
+            <div className="section-header">
+              <h2>Recent Referrals</h2>
+              <Link to="/admin/referrals" className="section-action">View All Referrals</Link>
+            </div>
+            
+            {recentReferrals.length > 0 ? (
+              <div className="admin-list">
+                {recentReferrals.map(referral => (
+                  <div key={referral.id} className="admin-list-item">
+                    <div className="admin-user-avatar">
+                      {referral.referrer?.name?.charAt(0) || 'R'}
+                    </div>
+                    <div className="admin-list-content">
+                      <div className="admin-list-title">
+                        {referral.referrer?.name || 'Unknown'} → {referral.referredName || 'New User'}
+                      </div>
+                      <div className="admin-list-subtitle">
+                        {referral.referrer?.username ? `@${referral.referrer.username}` : referral.referrer?.email || 'Unknown'}
+                      </div>
+                      <div className="admin-list-detail">
+                        {formatDate(referral.createdAt)}
+                      </div>
+                    </div>
+                    <div className="admin-list-status">
+                      <span className={`status-badge ${referral.status === 'active' ? 'status-active' : 'status-inactive'}`}>
+                        {referral.status || 'active'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="admin-no-data">
+                <p>No referrals yet</p>
               </div>
             )}
           </div>

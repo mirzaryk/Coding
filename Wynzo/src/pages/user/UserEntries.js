@@ -8,11 +8,12 @@ import {
   where, 
   orderBy, 
   getDoc,
-  doc
+  doc,
+  limit
 } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import '../UserPages.css';
-import { FaTrophy, FaTicketAlt, FaClock, FaCalendarAlt } from 'react-icons/fa';
+import { FaTrophy, FaTicketAlt, FaClock, FaCalendarAlt, FaSpinner } from 'react-icons/fa';
 import { useDraw } from '../../contexts/DrawContext';
 
 function UserEntries() {
@@ -20,6 +21,7 @@ function UserEntries() {
   const { claimPrize } = useDraw();
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
   const [stats, setStats] = useState({
     totalEntries: 0,
@@ -28,11 +30,14 @@ function UserEntries() {
     winningEntries: 0,
     totalWinnings: 0
   });
+  const [entriesPerPage, setEntriesPerPage] = useState(30);
+  const [hasMore, setHasMore] = useState(true);
+  const [allEntries, setAllEntries] = useState([]);
 
   useEffect(() => {
     const loadEntries = async () => {
       try {
-        // Query all user entries without limits
+        // Query all user entries without limits to get stats
         const entriesQuery = query(
           collection(db, 'entries'),
           where('userId', '==', currentUser.uid),
@@ -92,7 +97,9 @@ function UserEntries() {
         });
         
         const processedEntries = await Promise.all(entriesPromises);
-        setEntries(processedEntries);
+        setAllEntries(processedEntries);
+        setEntries(processedEntries.slice(0, entriesPerPage));
+        setHasMore(processedEntries.length > entriesPerPage);
         
         // Calculate statistics
         const stats = {
@@ -116,7 +123,7 @@ function UserEntries() {
     } else {
       setLoading(false);
     }
-  }, [currentUser]);
+  }, [currentUser, entriesPerPage]);
 
   // Helper to format date
   const formatDate = (timestamp) => {
@@ -141,11 +148,20 @@ function UserEntries() {
     if (place === 1) return '#FFD700'; // Gold
     if (place === 2) return '#C0C0C0'; // Silver
     if (place === 3) return '#CD7F32'; // Bronze
-    return '#6a1b9a';                  // Purple for others
+    return '#C33764';                  // Purple for others
   };
 
   // Filter entries based on active tab
   const filteredEntries = entries.filter(entry => {
+    if (activeTab === 'all') return true;
+    if (activeTab === 'winning') return entry.isWinner;
+    if (activeTab === 'active') return entry.drawStatus === 'active';
+    if (activeTab === 'completed') return entry.drawStatus === 'completed';
+    return true;
+  });
+  
+  // Filter all entries based on active tab to update hasMore state
+  const filteredAllEntries = allEntries.filter(entry => {
     if (activeTab === 'all') return true;
     if (activeTab === 'winning') return entry.isWinner;
     if (activeTab === 'active') return entry.drawStatus === 'active';
@@ -166,7 +182,46 @@ function UserEntries() {
             : e
         )
       );
+      
+      setAllEntries(prevEntries => 
+        prevEntries.map(e => 
+          e.id === entry.id 
+            ? { ...e, claimed: true } 
+            : e
+        )
+      );
     }
+  };
+  
+  // Handle tab changes with pagination reset
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    
+    // Reset to first page when changing tabs
+    const filtered = allEntries.filter(entry => {
+      if (tab === 'all') return true;
+      if (tab === 'winning') return entry.isWinner;
+      if (tab === 'active') return entry.drawStatus === 'active';
+      if (tab === 'completed') return entry.drawStatus === 'completed';
+      return true;
+    });
+    
+    setEntries(filtered.slice(0, entriesPerPage));
+    setHasMore(filtered.length > entriesPerPage);
+  };
+  
+  // Load more entries
+  const loadMore = () => {
+    setLoadingMore(true);
+    
+    setTimeout(() => {
+      const currentLength = entries.length;
+      const filtered = filteredAllEntries.slice(0, currentLength + entriesPerPage);
+      
+      setEntries(filtered);
+      setHasMore(filteredAllEntries.length > filtered.length);
+      setLoadingMore(false);
+    }, 500); // Short timeout for better UX
   };
 
   if (loading) {
@@ -231,105 +286,128 @@ function UserEntries() {
           <div className="entries-tabs">
             <button 
               className={`tab-btn ${activeTab === 'all' ? 'active' : ''}`}
-              onClick={() => setActiveTab('all')}
+              onClick={() => handleTabChange('all')}
             >
-              All Entries ({entries.length})
+              All Entries ({allEntries.length})
             </button>
             <button 
               className={`tab-btn ${activeTab === 'winning' ? 'active' : ''}`}
-              onClick={() => setActiveTab('winning')}
+              onClick={() => handleTabChange('winning')}
             >
-              Winners ({entries.filter(e => e.isWinner).length})
+              Winners ({allEntries.filter(e => e.isWinner).length})
             </button>
             <button 
               className={`tab-btn ${activeTab === 'active' ? 'active' : ''}`}
-              onClick={() => setActiveTab('active')}
+              onClick={() => handleTabChange('active')}
             >
               Active Draws
             </button>
             <button 
               className={`tab-btn ${activeTab === 'completed' ? 'active' : ''}`}
-              onClick={() => setActiveTab('completed')}
+              onClick={() => handleTabChange('completed')}
             >
               Completed
             </button>
           </div>
           
           {filteredEntries.length > 0 ? (
-            <div className="entries-modern-grid">
-              {filteredEntries.map(entry => (
-                <div key={entry.id} className={`entry-modern-card ${entry.isWinner ? 'winning' : ''} ${entry.drawStatus}`}>
-                  {entry.isWinner && (
-                    <div className="winner-badge" style={{ backgroundColor: getPositionColor(entry.place) }}>
-                      {entry.place}<sup>{entry.place === 1 ? 'st' : entry.place === 2 ? 'nd' : entry.place === 3 ? 'rd' : 'th'}</sup>
-                    </div>
-                  )}
-                  
-                  <div className="entry-header">
-                    <div className="ticket-badge">
-                      <span className="ticket-label">Ticket ID</span>
-                      <span className="ticket-number">{entry.ticketId}</span>
-                    </div>
-                    <div className="draw-meta">
-                      <div className="draw-number">Draw #{entry.drawNumber || entry.drawId.substring(0, 6)}</div>
-                      <div className={`draw-status status-${entry.drawStatus}`}>
-                        {entry.drawStatus === 'active' ? 'Active' : 
-                         entry.drawStatus === 'completed' ? 'Completed' : 
-                         entry.drawStatus === 'paused' ? 'Paused' : 'Unknown'}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="entry-body">
-                    <div className="entry-detail">
-                      <span className="detail-label">Entered On:</span>
-                      <span className="detail-value">{formatDate(entry.timestamp)}</span>
-                    </div>
-                    
-                    <div className="entry-detail">
-                      <span className="detail-label">Draw Date:</span>
-                      <span className="detail-value">{formatDate(entry.drawTime)}</span>
-                    </div>
-                    
-                    <div className="entry-detail">
-                      <span className="detail-label">Entry Fee:</span>
-                      <span className="detail-value negative">-{formatCurrency(entry.entryFee)}</span>
-                    </div>
-                    
+            <>
+              <div className="entries-modern-grid">
+                {filteredEntries.map(entry => (
+                  <div key={entry.id} className={`entry-modern-card ${entry.isWinner ? 'winning' : ''} ${entry.drawStatus}`}>
                     {entry.isWinner && (
-                      <div className="winning-detail">
-                        <div className="winning-amount">
-                          <span className="detail-label">Prize:</span>
-                          <span className="detail-value positive">{formatCurrency(entry.prize)}</span>
-                        </div>
-                        
-                        {!entry.claimed ? (
-                          <div className="claim-instructions">
-                            <div className="claim-note">
-                              Click below to claim your prize
-                            </div>
-                            <button 
-                              className="btn btn-sm btn-primary claim-btn"
-                              onClick={() => handleClaimPrize(entry)}
-                            >
-                              Claim Now
-                            </button>
-                          </div>
-                        ) : !entry.approved ? (
-                          <div className="claim-status pending">
-                            Claim submitted - waiting for approval
-                          </div>
-                        ) : (
-                          <div className="claim-status approved">
-                            Prize claimed and credited to your wallet
-                          </div>
-                        )}
+                      <div className="winner-badge" style={{ backgroundColor: getPositionColor(entry.place) }}>
+                        {entry.place}<sup>{entry.place === 1 ? 'st' : entry.place === 2 ? 'nd' : entry.place === 3 ? 'rd' : 'th'}</sup>
                       </div>
                     )}
+                    
+                    <div className="entry-header">
+                      <div className="ticket-badge">
+                        <span className="ticket-label">Ticket ID</span>
+                        <span className="ticket-number">{entry.ticketId}</span>
+                      </div>
+                      <div className="draw-meta">
+                        <div className="draw-number">Draw #{entry.drawNumber || entry.drawId.substring(0, 6)}</div>
+                        <div className={`draw-status status-${entry.drawStatus}`}>
+                          {entry.drawStatus === 'active' ? 'Active' : 
+                           entry.drawStatus === 'completed' ? 'Completed' : 
+                           entry.drawStatus === 'paused' ? 'Paused' : 'Unknown'}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="entry-body">
+                      <div className="entry-detail">
+                        <span className="detail-label">Entered On:</span>
+                        <span className="detail-value">{formatDate(entry.timestamp)}</span>
+                      </div>
+                      
+                      <div className="entry-detail">
+                        <span className="detail-label">Draw Date:</span>
+                        <span className="detail-value">{formatDate(entry.drawTime)}</span>
+                      </div>
+                      
+                      <div className="entry-detail">
+                        <span className="detail-label">Entry Fee:</span>
+                        <span className="detail-value negative">-{formatCurrency(entry.entryFee)}</span>
+                      </div>
+                      
+                      {entry.isWinner && (
+                        <div className="winning-detail">
+                          <div className="winning-amount">
+                            <span className="detail-label">Prize:</span>
+                            <span className="detail-value positive">{formatCurrency(entry.prize)}</span>
+                          </div>
+                          
+                          {!entry.claimed ? (
+                            <div className="claim-instructions">
+                              <div className="claim-note">
+                                Click below to claim your prize
+                              </div>
+                              <button 
+                                className="btn btn-sm btn-primary claim-btn"
+                                onClick={() => handleClaimPrize(entry)}
+                              >
+                                Claim Now
+                              </button>
+                            </div>
+                          ) : !entry.approved ? (
+                            <div className="claim-status pending">
+                              Claim submitted - waiting for approval
+                            </div>
+                          ) : (
+                            <div className="claim-status approved">
+                              Prize claimed and credited to your wallet
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {hasMore && (
+                <div className="load-more-container">
+                  <button 
+                    className="load-more-btn" 
+                    onClick={loadMore}
+                    disabled={loadingMore}
+                  >
+                    {loadingMore ? (
+                      <>
+                        <FaSpinner className="loading-icon" /> Loading more...
+                      </>
+                    ) : (
+                      <>Load More Entries</>
+                    )}
+                  </button>
+                  <div className="entries-shown">
+                    Showing {filteredEntries.length} of {filteredAllEntries.length} entries
                   </div>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           ) : (
             <div className="no-entries">
               <FaTicketAlt className="no-entries-icon" />

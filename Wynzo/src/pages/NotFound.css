@@ -2,43 +2,90 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 70px - 300px); /* Viewport height minus navbar and footer */
-  padding: 60px 0;
+  text-align: center;
+  padding: 80px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: calc(100vh - 70px - 300px);
 }
 
 .not-found-content {
   text-align: center;
   max-width: 600px;
   margin: 0 auto;
-  padding: 40px;
+  padding: 3rem 2rem;
   background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.not-found-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: var(--main-gradient);
+}
+
+.not-found-icon {
+  font-size: 100px;
+  color: #e0e0e0;
+  margin-bottom: 20px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
 }
 
 .not-found-title {
-  font-size: 8rem;
-  font-weight: 700;
-  color: #6a1b9a;
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: var(--main-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
   margin: 0;
+  margin-bottom: 10px;
   line-height: 1;
 }
 
 .not-found-subtitle {
-  font-size: 2rem;
-  color: #333;
+  font-size: 1.8rem;
+  color: var(--text-primary);
   margin-bottom: 20px;
 }
 
 .not-found-description {
   font-size: 1.1rem;
-  color: #757575;
+  color: var(--text-secondary);
   margin-bottom: 30px;
+}
+
+.not-found-message {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.not-found-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 @media screen and (max-width: 576px) {
   .not-found-title {
-    font-size: 6rem;
+    font-size: 2.5rem;
   }
   
   .not-found-subtitle {
@@ -46,6 +93,6 @@
   }
   
   .not-found-content {
-    padding: 20px;
+    padding: 2rem 1.5rem;
   }
 }

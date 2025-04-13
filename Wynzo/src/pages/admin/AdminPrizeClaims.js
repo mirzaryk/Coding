@@ -218,16 +218,29 @@ function AdminPrizeClaims() {
           balance: currentBalance + selectedClaim.amount
         });
         
-        // Update user task document if it exists
+        // Try to update user task document if it exists
         if (selectedClaim.taskDate) {
-          const dateString = new Date(selectedClaim.taskDate.seconds * 1000).toISOString().split('T')[0];
-          const userTaskId = `${selectedClaim.userId}_${dateString}`;
-          const userTaskRef = doc(db, 'userTasks', userTaskId);
-          
-          await updateDoc(userTaskRef, {
-            rewardApproved: true,
-            rewardApprovedAt: serverTimestamp()
-          });
+          try {
+            const dateString = new Date(selectedClaim.taskDate.seconds * 1000).toISOString().split('T')[0];
+            const userTaskId = `${selectedClaim.userId}_${dateString}`;
+            const userTaskRef = doc(db, 'userTasks', userTaskId);
+            
+            // Check if document exists first
+            const userTaskSnap = await getDoc(userTaskRef);
+            
+            if (userTaskSnap.exists()) {
+              await updateDoc(userTaskRef, {
+                rewardApproved: true,
+                rewardApprovedAt: serverTimestamp()
+              });
+            } else {
+              console.log(`User task document ${userTaskId} does not exist, skipping update`);
+            }
+          } catch (taskError) {
+            // Log the error but don't fail the whole operation
+            console.warn("Failed to update user task document:", taskError);
+            // The claim has been approved, so we'll continue
+          }
         }
         
         toast.success("Task reward approved successfully");
@@ -243,7 +256,27 @@ function AdminPrizeClaims() {
       }
     } catch (error) {
       console.error("Error approving task reward:", error);
-      toast.error("Failed to approve task reward");
+      
+      // Check if the transaction was already updated despite the error
+      try {
+        const updatedClaimRef = doc(db, 'transactions', selectedClaim.id);
+        const updatedClaimSnap = await getDoc(updatedClaimRef);
+        
+        if (updatedClaimSnap.exists() && updatedClaimSnap.data().status === 'completed') {
+          toast.warning("There was an issue, but the reward appears to have been approved");
+          
+          // Update UI to reflect the completed status
+          setSelectedClaim(prev => ({
+            ...prev,
+            status: 'completed',
+            approvedAt: updatedClaimSnap.data().approvedAt || Timestamp.now()
+          }));
+        } else {
+          toast.error("Failed to approve task reward");
+        }
+      } catch (checkError) {
+        toast.error("Failed to approve task reward");
+      }
     } finally {
       setProcessingApproval(false);
     }
@@ -328,7 +361,7 @@ function AdminPrizeClaims() {
     if (place === 1) return '#FFD700'; // Gold
     if (place === 2) return '#C0C0C0'; // Silver
     if (place === 3) return '#CD7F32'; // Bronze
-    return '#6a1b9a';                  // Purple for others
+    return '#C33764';                  // Purple for others
   };
 
   // Get ordinal suffix for numbers

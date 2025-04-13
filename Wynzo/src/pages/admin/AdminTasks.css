@@ -25,7 +25,7 @@
 .stat-value {
   font-size: 18px;
   font-weight: bold;
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
 }
 
 .tasks-list-admin {
@@ -51,26 +51,30 @@
   width: 36px;
   height: 36px;
   border-radius: 8px;
-  background-color: #f5f0ff;
+  background-color: #C1C8E4; /* Changed to light lavender */
   margin: 0 auto;
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
   font-size: 16px;
 }
 
 .task-details {
   padding: 5px 0;
+  text-align: left; /* Ensure text is left-aligned */
+  flex-direction: column;
 }
 
 .task-title {
   margin: 0 0 5px 0;
   font-size: 16px;
   font-weight: 500;
+  text-align: left;
 }
 
 .task-description {
   margin: 0;
   color: #666;
   font-size: 14px;
+  text-align: left;
 }
 
 .status-badge {
@@ -93,12 +97,12 @@
 }
 
 .status-active {
-  background-color: #e8f5e9;
-  color: #43a047;
+  background-color: #E1F5FE; /* Light blue background */
+  color: #C33764; /* Medium blue */
 }
 
 .status-active::before {
-  background-color: #43a047;
+  background-color: #1D2671; /* Medium blue */
 }
 
 .status-inactive {
@@ -114,8 +118,8 @@
   display: inline-block;
   margin-top: 8px;
   padding: 2px 8px;
-  background-color: #e3f2fd;
-  color: #1976d2;
+  background-color: #84CEEB; /* Changed to light blue */
+  color: #1D2671; /* Changed to primary blue */
   border-radius: 4px;
   font-size: 12px;
 }
@@ -127,17 +131,32 @@
 .btn-group {
   display: flex;
   gap: 5px;
-  justify-content: flex-end;
+  justify-content: center; /* Center buttons for better alignment */
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.btn-group .btn {
+  flex: 1 1 auto;
+  min-width: 80px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding: 8px 10px;
 }
 
 .actions-column {
-  text-align: right;
+  text-align: center; /* Center the action buttons */
+  min-width: 160px;
 }
 
 .inline-edit-form {
   padding: 10px;
   background-color: #f9f9f9;
   border-radius: 4px;
+  text-align: left;
 }
 
 .inline-edit-form .form-group {
@@ -187,27 +206,31 @@
   margin-bottom: 15px;
   border-bottom: 1px solid #eee;
   padding-bottom: 10px;
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
 }
 
 .form-row {
   display: flex;
   gap: 15px;
   margin-bottom: 15px;
+  flex-wrap: wrap; /* Allow fields to wrap on small screens */
 }
 
 .form-group {
   margin-bottom: 15px;
+  width: 100%; /* Full width by default */
 }
 
 .form-group-half {
   flex: 1;
+  min-width: 200px; /* Minimum width before wrapping */
 }
 
 .form-group label {
   display: block;
   margin-bottom: 5px;
   font-weight: 500;
+  text-align: left;
 }
 
 .form-actions {
@@ -216,12 +239,28 @@
   gap: 10px;
   border-top: 1px solid #eee;
   padding-top: 15px;
+  margin-bottom: 10px;
+  flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+}
+
+.form-actions .btn {
+  flex: 0 1 auto; /* Don't force equal widths */
+  min-width: 100px; /* Minimum width */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .checkbox-group {
   display: flex;
   align-items: flex-end;
   height: 100%;
+}
+
+.checkbox-group-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .order-controls {
@@ -267,15 +306,18 @@ button.btn-icon {
   cursor: pointer;
   font-size: 14px;
   padding: 4px;
-  color: #6a1b9a;
+  color: #C33764;
   width: 24px;
   height: 24px;
   border-radius: 4px;
   margin-right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button.btn-icon:hover {
-  background-color: #f5f0ff;
+  background-color: #c390a03e;
 }
 
 .btn-icon:disabled {
@@ -303,16 +345,19 @@ button.btn-icon:hover {
 
 .task-to-delete h4 {
   margin: 0 0 5px 0;
+  text-align: left;
 }
 
 .task-to-delete p {
   margin: 0;
   color: #666;
+  text-align: left;
 }
 
 .warning-text {
   color: #d32f2f;
   font-style: italic;
+  text-align: left;
 }
 
 @media (max-width: 768px) {
@@ -377,7 +422,7 @@ button.btn-icon:hover {
 
 .task-filter-box .filter-select:focus {
   outline: none;
-  border-color: #6a1b9a;
+  border-color: #C33764;
   box-shadow: 0 0 0 2px rgba(106, 27, 154, 0.2);
 }
 
@@ -387,7 +432,7 @@ button.btn-icon:hover {
 }
 
 .create-task-btn {
-  background-color: #6a1b9a;
+  background-color: #1D2671; /* Changed to primary blue */
   color: white;
   border: none;
   padding: 12px 20px;
@@ -399,10 +444,13 @@ button.btn-icon:hover {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  width: 100%;
+  justify-content: center;
+  margin-top: 5px; /* Add spacing */
 }
 
 .create-task-btn:hover {
-  background-color: #5c1786;
+  background-color: #3A5FC9; /* Darker shade of primary blue */
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -485,7 +533,7 @@ button.btn-icon:hover {
 
 .modal-header h3 {
   margin: 0;
-  color: #6a1b9a;
+  color: #C33764;
 }
 
 .modal-close-btn {
@@ -501,15 +549,22 @@ button.btn-icon:hover {
 }
 
 .modal-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
   padding: 16px 20px;
   border-top: 1px solid #eee;
+}
+
+.modal-footer .btn {
+  flex: 1;
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
+  align-items: center;
+  justify-content: center;
 }
 
 .reward-coin {
-  color: #FFD700;
+  color: #C33764;
 }
 
 @media (max-width: 768px) {
@@ -529,6 +584,7 @@ button.btn-icon:hover {
   .create-task-btn {
     width: 100%;
     justify-content: center;
+    margin-top: 10px;
   }
   
   .form-row {
@@ -542,10 +598,313 @@ button.btn-icon:hover {
   }
   
   .btn-group {
+    flex-direction: row; /* Keep buttons in a row */
+    width: 100%;
+    gap: 6px;
+  }
+  
+  .btn-group .btn {
+    flex: 1; /* Take equal width */
+    padding: 8px 6px;
+    font-size: 11px;
+    min-width: 0;
+    white-space: nowrap;
+  }
+  
+  .actions-column .btn-sm {
+    padding: 8px 6px;
+    font-size: 11px;
+  }
+  
+  .actions-column .btn-sm .btn-icon {
+    margin-right: 3px;
+    font-size: 10px;
+  }
+  
+  /* Improve order button display */
+  .order-controls {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  
+  .order-buttons {
+    flex-direction: row;
+  }
+  
+  /* Make sure form fields stack properly on mobile */
+  .form-row {
     flex-direction: column;
+    gap: 10px;
+  }
+  
+  .form-group-half {
+    width: 100%;
+  }
+  
+  /* Ensure modal buttons are usable on mobile */
+  .modal-footer {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .modal-footer .btn {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
   }
 }
 
+/* Extra small screens */
+@media (max-width: 576px) {
+  .tasks-table th, 
+  .tasks-table td {
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+  
+  .task-title {
+    font-size: 14px;
+  }
+  
+  .task-description {
+    font-size: 12px;
+  }
+  
+  .btn-group .btn {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+  
+  .actions-column .btn-sm .btn-icon {
+    margin-right: 0;
+  }
+  
+  /* Display buttons more compactly */
+  .btn-group {
+    gap: 4px;
+  }
+  
+  /* Make table more readable on small screens */
+  .tasks-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .btn-group {
+    flex-direction: row; /* Keep as row on mobile */
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 5px;
+  }
+  
+  .btn-group .btn {
+    padding: 8px 10px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0; /* Allow buttons to be as small as needed */
+    flex: 1; /* All buttons equal width */
+  }
+  
+  .actions-column .btn-sm {
+    padding: 8px;
+    font-size: 11px;
+  }
+  
+  .actions-column .btn-sm .btn-icon {
+    margin-right: 3px;
+    font-size: 10px;
+  }
+  
+  .form-actions {
+    flex-direction: row; /* Keep as row */
+    justify-content: space-between;
+  }
+  
+  .form-actions .btn {
+    flex: 1; /* Equal width */
+    white-space: nowrap;
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  /* Ensure table content is properly aligned */
+  .tasks-table td {
+    text-align: left;
+    vertical-align: middle;
+  }
+  
+  .tasks-table .actions-column {
+    text-align: center; /* Center action buttons for better spacing */
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-footer {
+    justify-content: space-between;
+  }
+  
+  .modal-footer .btn {
+    flex: 1; /* Equal width on very small screens */
+    font-size: 13px;
+    padding: 10px 5px;
+    min-width: 0;
+  }
+  
+  /* Adjust form rows for better mobile display */
+  .checkbox-row {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  
+  /* Fix form labels on small screens */
+  .form-group label {
+    font-size: 13px;
+  }
+}
+
+/* Fix for order buttons alignment on all screens */
+.order-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .order-controls {
+    flex-direction: row;
+    gap: 5px;
+  }
+  
+  .order-buttons {
+    flex-direction: row;
+    gap: 5px;
+  }
+}
+
+/* Fix for standalone buttons and table cells alignment */
+button.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Add styles for the new URL and popup time fields */
+.task-url, .task-popup-time {
+  margin: 5px 0 0 0;
+  font-size: 13px;
+  color: #666;
+  text-align: left;
+}
+
+.task-url {
+  color: #1976d2;
+  word-break: break-all;
+}
+
+/* Improve responsive buttons in mobile view */
+@media (max-width: 768px) {
+  .btn-group {
+    flex-direction: row; /* Keep buttons in a row */
+    width: 100%;
+  }
+  
+  .btn-group .btn {
+    flex: 1; /* Take equal width */
+    padding: 8px 10px;
+    font-size: 12px;
+    min-width: 0;
+    white-space: nowrap;
+  }
+  
+  .actions-column .btn-sm {
+    padding: 8px;
+    font-size: 11px;
+  }
+  
+  .actions-column .btn-sm .btn-icon {
+    margin-right: 3px;
+    font-size: 10px;
+  }
+  
+  /* Improve order button display */
+  .order-controls {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  
+  .order-buttons {
+    flex-direction: row;
+  }
+  
+  /* Make sure form fields stack properly on mobile */
+  .form-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .form-group-half {
+    width: 100%;
+  }
+  
+  /* Ensure modal buttons are usable on mobile */
+  .modal-footer {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .modal-footer .btn {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 576px) {
+  .tasks-table th, 
+  .tasks-table td {
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+  
+  .task-title {
+    font-size: 14px;
+  }
+  
+  .task-description {
+    font-size: 12px;
+  }
+  
+  .btn-group .btn {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+  
+  .actions-column .btn-sm .btn-icon {
+    margin-right: 0;
+  }
+  
+  /* Display buttons more compactly */
+  .btn-group {
+    gap: 4px;
+  }
+  
+  /* Make table more readable on small screens */
+  .tasks-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
 .actions-column .btn-sm {
   display: inline-flex;
   align-items: center;
@@ -555,4 +914,90 @@ button.btn-icon:hover {
 .actions-column .btn-sm .btn-icon {
   margin-right: 5px;
   font-size: 0.9em;
+}
+
+.tasks-table td, .tasks-table th {
+  text-align: left;
+  vertical-align: middle;
+}
+
+.tasks-table .actions-column {
+  text-align: center;
+}
+
+.tasks-table .task-type {
+  text-align: center;
+}
+
+/* Make buttons more responsive on all screen sizes */
+@media (max-width: 1200px) {
+  .btn-sm {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  
+  .btn-group {
+    flex-wrap: nowrap; /* Keep buttons in a row */
+  }
+}
+
+@media (max-width: 992px) {
+  .btn-group .btn {
+    font-size: 12px;
+    padding: 8px 6px;
+  }
+  
+  .btn-group .btn-icon {
+    margin-right: 4px;
+    font-size: 12px;
+  }
+}
+
+/* Even smaller screens */
+@media (max-width: 576px) {
+  .tasks-table {
+    display: block;
+    overflow-x: auto;
+  }
+  
+  .btn-group {
+    gap: 4px;
+  }
+  
+  .btn-group .btn {
+    padding: 6px 4px;
+    font-size: 10px;
+  }
+  
+  .btn-icon {
+    font-size: 10px;
+    margin-right: 2px;
+  }
+  
+  .form-actions {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .form-actions .btn {
+    flex: 1;
+    font-size: 12px;
+    padding: 8px 6px;
+  }
+  
+  /* Hide text and show only icons on very small screens */
+  .actions-column .btn-sm .btn-text {
+    display: none;
+  }
+  
+  .actions-column .btn-sm .btn-icon {
+    margin-right: 0;
+    font-size: 12px;
+  }
+  
+  .actions-column .btn-sm {
+    padding: 8px;
+    min-width: 32px;
+    justify-content: center;
+  }
 }

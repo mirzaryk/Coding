@@ -2,15 +2,20 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Navbar.css';
-import { FaBars, FaTimes, FaUser, FaSignOutAlt, FaWallet } from 'react-icons/fa';
+import { FaBars, FaTimes, FaUser, FaSignOutAlt, FaWallet, FaChevronDown } from 'react-icons/fa';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const { currentUser, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+  
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   const handleLogout = async () => {
@@ -20,6 +25,10 @@ function Navbar() {
     } catch (error) {
       console.error("Failed to log out", error);
     }
+  };
+  
+  const closeDropdown = () => {
+    setDropdownOpen(false);
   };
 
   return (
@@ -62,27 +71,31 @@ function Navbar() {
                   Tasks
                 </Link>
               </li>
-              <li className="nav-item dropdown">
-                <div className="nav-link dropdown-toggle">
+              <li className={`nav-item dropdown ${dropdownOpen ? 'active' : ''}`}>
+                <div className="nav-link dropdown-toggle" onClick={toggleDropdown}>
                   <FaUser className="icon-margin-right" /> 
-                  {currentUser.displayName || 'Account'}
+                  {currentUser.displayName || 'Account'} 
+                  <FaChevronDown style={{ marginLeft: '5px', fontSize: '0.8em' }} />
                 </div>
-                <div className="dropdown-menu">
-                  <Link to="/profile" className="dropdown-item" onClick={() => setIsOpen(false)}>
+                <div className={`dropdown-menu ${dropdownOpen ? 'show' : ''}`}>
+                  <Link to="/profile" className="dropdown-item" onClick={() => { setIsOpen(false); closeDropdown(); }}>
                     Profile
                   </Link>
-                  <Link to="/my-entries" className="dropdown-item" onClick={() => setIsOpen(false)}>
+                  <Link to="/my-entries" className="dropdown-item" onClick={() => { setIsOpen(false); closeDropdown(); }}>
                     My Entries
                   </Link>
-                  <Link to="/wallet" className="dropdown-item" onClick={() => setIsOpen(false)}>
+                  <Link to="/referrals" className="dropdown-item" onClick={() => { setIsOpen(false); closeDropdown(); }}>
+                    My Referrals
+                  </Link>
+                  <Link to="/wallet" className="dropdown-item" onClick={() => { setIsOpen(false); closeDropdown(); }}>
                     <FaWallet className="icon-margin-right" /> Wallet
                   </Link>
                   {isAdmin && (
-                    <Link to="/admin" className="dropdown-item" onClick={() => setIsOpen(false)}>
+                    <Link to="/admin" className="dropdown-item" onClick={() => { setIsOpen(false); closeDropdown(); }}>
                       Admin Panel
                     </Link>
                   )}
-                  <button onClick={handleLogout} className="dropdown-item logout-btn">
+                  <button onClick={() => { handleLogout(); setIsOpen(false); closeDropdown(); }} className="dropdown-item logout-btn">
                     <FaSignOutAlt className="icon-margin-right" /> Logout
                   </button>
                 </div>

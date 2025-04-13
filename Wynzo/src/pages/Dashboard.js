@@ -34,7 +34,7 @@ function Dashboard() {
           id: doc.id,
           ...doc.data()
         }));
-        setRecentEntries(entriesData.slice(0, 10)); // Show only 10 most recent for display
+        setRecentEntries(entriesData.slice(0, 5)); // Show only 10 most recent for display
         
         // Fetch recent winnings (transactions of type 'winning')
         const winningsQuery = query(
@@ -128,6 +128,8 @@ function Dashboard() {
             </div>
           </div>
         </div>
+
+        
         
         <div className="dashboard-sections">
           <div className="dashboard-section current-draw">

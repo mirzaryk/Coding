@@ -34,11 +34,11 @@
 }
 
 .pending-icon {
-  color: #ff9800;
+  color: #C33764;
 }
 
 .completed-icon {
-  color: #4caf50;
+  color: #C33764;
 }
 
 .claim-status-text h3 {
@@ -57,7 +57,7 @@
   justify-content: space-between;
   padding: 20px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #6a1b9a 0%, #9c27b0 100%);
+  background: linear-gradient(135deg, #1D2671 0%, #1D2671 100%);
   color: white;
 }
 
@@ -98,7 +98,7 @@
 .section-title {
   margin: 0 0 10px 0;
   font-size: 1.1rem;
-  color: #6a1b9a;
+  color: #1D2671;
   border-bottom: 1px solid #f0f0f0;
   padding-bottom: 10px;
 }
@@ -131,7 +131,7 @@
 }
 
 .info-value.highlight {
-  color: #6a1b9a;
+  color: #1D2671;
   font-size: 1.1rem;
 }
 
@@ -156,7 +156,7 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #6a1b9a;
+  background-color: #1D2671;
   color: white;
   display: flex;
   align-items: center;
@@ -196,7 +196,7 @@
 
 .balance-amount {
   font-weight: bold;
-  color: #4caf50;
+  color: #C33764;
   font-size: 1.2rem;
 }
 
@@ -225,17 +225,17 @@
 
 .view-user-profile {
   display: inline-block;
-  color: #6a1b9a;
+  color: #1D2671;
   text-decoration: none;
   padding: 8px 12px;
   border-radius: 4px;
-  background-color: #f5f0ff;
+  background-color: #ECF2FE;
   text-align: center;
   transition: all 0.3s ease;
 }
 
 .view-user-profile:hover {
-  background-color: #e9dcff;
+  background-color: #DBE8FD;
   text-decoration: none;
 }
 
@@ -256,13 +256,13 @@
 }
 
 .type-prize-claim {
-  background-color: #e3f2fd;
-  color: #1976d2;
+  background-color: #ECF2FE;
+  color: #1D2671;
 }
 
 .type-task-reward {
-  background-color: #f0f4c3;
-  color: #8bc34a;
+  background-color: #e4b6c450;
+  color: #C33764;
 }
 
 .status-rejected {
@@ -278,7 +278,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: #4caf50;
+  background-color: #C33764;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -382,7 +382,7 @@ textarea.form-control {
   font-size: 0.95rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236a1b9a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235680E9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   cursor: pointer;
@@ -396,7 +396,7 @@ textarea.form-control {
   font-size: 0.95rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236a1b9a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235680E9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   cursor: pointer;
@@ -404,15 +404,13 @@ textarea.form-control {
 
 .claim-filter-box .filter-select:focus {
   outline: none;
-  border-color: #6a1b9a;
-  box-shadow: 0 0 0 2px rgba(106, 27, 154, 0.2);
+  border-color: #1D2671;
+  box-shadow: 0 0 0 2px rgba(86, 128, 233, 0.2);
 }
 
 .claim-type-filter {
   position: relative;
 }
-
-
 
 .claim-type-filter .filter-select {
   padding-left: 40px;
@@ -421,8 +419,6 @@ textarea.form-control {
 .claim-status-filter {
   position: relative;
 }
-
-
 
 .claim-status-filter .filter-select {
   padding-left: 40px;

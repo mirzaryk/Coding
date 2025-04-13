@@ -64,21 +64,21 @@
 
 .user-balance {
   font-weight: 500;
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
 }
 
 .view-btn {
-  border-color: #6a1b9a;
-  color: #6a1b9a;
+  border-color: #1D2671; /* Changed to primary blue */
+  color: #1D2671; /* Changed to primary blue */
 }
 
 .view-btn:hover {
-  background-color: #6a1b9a;
+  background-color: #1D2671; /* Changed to primary blue */
   color: white;
 }
 
 .btn-icon {
-  margin-right: 5px;
+  margin-right: auto;
 }
 
 /* No results styling */
@@ -179,7 +179,7 @@
 
 .stat-icon {
   font-size: 1.5rem;
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
 }
 
 .stat-label {
@@ -195,13 +195,13 @@
 }
 
 .role-badge {
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
   text-transform: capitalize;
 }
 
 /* Section styling */
 .section-title {
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
   font-size: 1.2rem;
   margin-bottom: 20px;
   padding-bottom: 10px;
@@ -305,6 +305,7 @@
   gap: 10px;
   max-height: 400px;
   overflow-y: auto;
+  text-align: center;
 }
 
 .transaction-card {
@@ -315,7 +316,7 @@
 }
 
 .transaction-card.transaction-deposit {
-  border-left-color: #4caf50;
+  border-left-color: #C33764;
 }
 
 .transaction-card.transaction-withdrawal {
@@ -323,15 +324,15 @@
 }
 
 .transaction-card.transaction-manual-credit {
-  border-left-color: #2196f3;
+  border-left-color: #C33764; /* Changed to medium blue */
 }
 
 .transaction-card.transaction-manual-debit {
-  border-left-color: #ff9800;
+  border-left-color: #C33764;
 }
 
 .transaction-card.transaction-draw-entry {
-  border-left-color: #9c27b0;
+  border-left-color: #1D2671; /* Changed to purple */
 }
 
 .transaction-card.transaction-prize-claim {
@@ -353,7 +354,7 @@
 }
 
 .transaction-type-badge.deposit {
-  background-color: #4caf50;
+  background-color: #C33764;
 }
 
 .transaction-type-badge.withdrawal {
@@ -361,15 +362,15 @@
 }
 
 .transaction-type-badge.manual-credit {
-  background-color: #2196f3;
+  background-color: #C33764; /* Changed to medium blue */
 }
 
 .transaction-type-badge.manual-debit {
-  background-color: #ff9800;
+  background-color: #C33764;
 }
 
 .transaction-type-badge.draw-entry {
-  background-color: #9c27b0;
+  background-color: #1D2671; /* Changed to purple */
 }
 
 .transaction-type-badge.prize-claim {
@@ -382,7 +383,7 @@
 }
 
 .transaction-amount.positive {
-  color: #4caf50;
+  color: #C33764;
 }
 
 .transaction-amount.negative {
@@ -491,7 +492,7 @@
   border-radius: 0;
   box-shadow: none;
   border-top: 1px solid #eee;
-  border-bottom: 2px solid #6a1b9a;
+  border-bottom: 2px solid #1D2671; /* Changed to primary blue */
 }
 
 /* Custom filter styles for users page */
@@ -518,25 +519,26 @@
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
   opacity: 0.7;
 }
 
 .search-box .search-input {
-  width: 100%;
-  padding: 12px 15px 12px 45px;
+  width: 500px;
+  padding: 12px 15px 12px 15px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   font-size: 0.95rem;
   background-color: white;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
+  
 }
 
 .search-box .search-input:focus {
   outline: none;
-  border-color: #6a1b9a;
-  box-shadow: 0 0 0 2px rgba(106, 27, 154, 0.2);
+  border-color: #1D2671; /* Changed to primary blue */
+  box-shadow: 0 0 0 2px rgba(86, 128, 233, 0.2);
 }
 
 .filter-box {
@@ -544,8 +546,6 @@
   flex-direction: column;
   min-width: 200px;
 }
-
-
 
 .filter-box .filter-select {
   padding: 12px 35px 12px 15px;
@@ -555,7 +555,7 @@
   font-size: 0.95rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236a1b9a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235680E9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   cursor: pointer;
@@ -563,8 +563,8 @@
 
 .filter-box .filter-select:focus {
   outline: none;
-  border-color: #6a1b9a;
-  box-shadow: 0 0 0 2px rgba(106, 27, 154, 0.2);
+  border-color: #1D2671; /* Changed to primary blue */
+  box-shadow: 0 0 0 2px rgba(86, 128, 233, 0.2);
 }
 
 /* Responsive styles */
@@ -580,4 +580,91 @@
   }
 }
 
-/* Keep other styles unchanged */
+/* Delete confirmation dialog */
+.delete-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-confirm-dialog {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.delete-confirm-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.warning-icon {
+  color: C33764;
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.delete-confirm-body {
+  margin-bottom: 20px;
+}
+
+.user-to-delete {
+  font-weight: bold;
+  font-size: 16px;
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.warning-text {
+  color: #C33764;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.delete-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.delete-btn {
+  margin-left: 10px;
+}
+
+/* User actions styling */
+.user-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+.user-actions .btn {
+  padding: 0.25rem 0.5rem;
+}
+
+.user-actions .delete-btn {
+  padding: 0.35rem 1.0rem;
+  color: #C33764;
+  border-color: #C33764;
+}
+
+.user-actions .delete-btn:hover {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(195, 55, 100, 1), rgba(29, 38, 113, 1));
+}

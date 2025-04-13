@@ -13,7 +13,7 @@
 .admin-title {
   font-size: 2rem;
   align-self: center;
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
   margin: 2px;
 }
 
@@ -41,8 +41,8 @@
   width: 50px;
   height: 50px;
   border-radius: 10px;
-  background-color: #f5f0ff;
-  color: #6a1b9a;
+  background-color: #C1C8E4; /* Changed to light lavender */
+  color: #1D2671; /* Changed to primary blue */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,11 +101,11 @@
 .section-header h2 {
   margin: 0;
   font-size: 1.2rem;
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
 }
 
 .section-action {
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
   font-size: 0.9rem;
   text-decoration: none;
 }
@@ -141,17 +141,17 @@
 }
 
 .status-badge.active {
-  background-color: #4caf50;
+  background-color: #1D2671;
   color: white;
 }
 
 .status-badge.completed {
-  background-color: #2196f3;
+  background-color: #C33764;
   color: white;
 }
 
 .status-badge.pending {
-  background-color: #ff9800;
+  background-color: #C33764;
   color: white;
 }
 
@@ -189,7 +189,7 @@
 
 .progress-fill {
   height: 100%;
-  background-color: #6a1b9a;
+  background-color: #1D2671; /* Changed to primary blue */
   border-radius: 5px;
 }
 
@@ -221,7 +221,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #6a1b9a;
+  background-color: #1D2671; /* Changed to primary blue */
   color: white;
   display: flex;
   align-items: center;
@@ -234,7 +234,7 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: #f50057;
+  background-color: #1D2671; /* Changed to primary blue */
   color: white;
   display: flex;
   align-items: center;
@@ -265,7 +265,7 @@
 
 .admin-list-amount {
   font-weight: bold;
-  color: #4caf50;
+  color: #1D2671;
 }
 
 .admin-list-actions {
@@ -302,7 +302,7 @@
 }
 
 .admin-tab.active {
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
 }
 
 .admin-tab.active::after {
@@ -312,7 +312,7 @@
   left: 0;
   width: 100%;
   height: 3px;
-  background-color: #6a1b9a;
+  background-color: #1D2671; /* Changed to primary blue */
 }
 
 .admin-search {
@@ -341,8 +341,8 @@
 }
 
 .admin-table th {
-  background-color: #f5f0ff;
-  color: #6a1b9a;
+  background-color: #C1C8E4; /* Changed to light lavender */
+  color: #1D2671; /* Changed to primary blue */
   font-weight: 500;
 }
 
@@ -357,7 +357,7 @@
 
 .admin-form-title {
   font-size: 1.2rem;
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
   margin-bottom: 15px;
   padding-bottom: 5px;
   border-bottom: 1px solid #e0e0e0;
@@ -373,9 +373,13 @@
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid rgba(106, 27, 154, 0.2);
+  border: 4px solid rgba(195, 55, 99, 0.562);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text; /* For Firefox */
+  color: transparent;;
   border-radius: 50%;
-  border-top-color: #6a1b9a;
+  border-top-color: #C33764;
   animation: spin 1s ease-in-out infinite;
   margin: 30px auto;
 }
@@ -410,7 +414,7 @@
 
 .search-input-wrapper:focus-within {
   background-color: #fff;
-  box-shadow: 0 0 0 2px #6a1b9a20;
+  box-shadow: 0 0 0 2px #5AB9EA20;
 }
 
 .search-icon {
@@ -465,14 +469,14 @@
 
 .admin-filter-options select:hover,
 .admin-filter-options .btn:hover {
-  border-color: #6a1b9a;
+  border-color: #C33764;
 }
 
 .admin-filter-options select:focus,
 .admin-filter-options .btn:focus {
   outline: none;
-  border-color: #6a1b9a;
-  box-shadow: 0 0 0 2px rgba(106, 27, 154, 0.2);
+  border-color:#C33764;
+  box-shadow: 0 0 0 2px rgba(86, 128, 233, 1);
 }
 
 /* Specific styles for claims page filters */
@@ -512,7 +516,7 @@
   position: absolute;
   left: 15px;
   top: 14px;
-  color: #6a1b9a;
+  color: #C33764;
   opacity: 0.7;
   z-index: 1;
 }
@@ -532,7 +536,7 @@
   position: absolute;
   left: 15px;
   top: 14px;
-  color: #6a1b9a;
+  color: #C33764;
   opacity: 0.7;
   z-index: 1;
 }
@@ -567,8 +571,8 @@
 
 .users-filter-options .search-input-wrapper input:focus {
   outline: none;
-  border-color: #6a1b9a;
-  box-shadow: 0 0 0 2px rgba(106, 27, 154, 0.2);
+  border-color: #C33764;
+  box-shadow: 0 0 0 2px rgba(86, 128, 233, 1);
 }
 
 .users-filter-options .search-input-wrapper::before {
@@ -578,7 +582,7 @@
   position: absolute;
   left: 15px;
   top: 14px;
-  color: #6a1b9a;
+  color: #C33764;
   opacity: 0.7;
   z-index: 1;
 }
@@ -611,7 +615,7 @@
   align-items: center;
   gap: 8px;
   font-size: 0.85rem;
-  color: #6a1b9a;
+  color: #C33764;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -670,8 +674,8 @@
 
 /* Pending deposits styling */
 .admin-alert {
-  background-color: #fff3e0;
-  border-left: 4px solid #ff9800;
+  background: linear-gradient(135deg, #C33764 , #1D2671);
+  border-left: 4px solid #1D2671;
   padding: 15px;
   margin-bottom: 20px;
   border-radius: 4px;
@@ -679,7 +683,7 @@
 
 .admin-alert h3 {
   margin-top: 0;
-  color: #e65100;
+  color: #ff5900;
   font-size: 1.2rem;
   margin-bottom: 15px;
 }
@@ -711,7 +715,7 @@
 
 .deposit-amount {
   font-weight: bold;
-  color: #ff9800;
+  color: #C33764;
   min-width: 100px;
 }
 
@@ -750,7 +754,7 @@
 }
 
 .amount-positive {
-  color: #4caf50;
+  color: #1D2671;
   font-weight: bold;
 }
 
@@ -834,8 +838,8 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background-color: #f5f0ff;
-  color: #6a1b9a;
+  background-color: #c390a03e;
+  color: #C33764;
   border: none;
   font-weight: 500;
   transition: all 0.3s ease;
@@ -873,8 +877,8 @@
 }
 
 .admin-table th {
-  background-color: #f5f0ff;
-  color: #6a1b9a;
+  background-color: #c390a03e;
+  color: #C33764;
   padding: 15px;
   text-align: left;
   font-weight: 500;
@@ -895,7 +899,7 @@
 
 .admin-table .table-row.selected {
   background-color: #f0e6ff;
-  border-left: 3px solid #6a1b9a;
+  border-left: 3px solid #C33764;
 }
 
 .admin-detail-panel {
@@ -907,7 +911,7 @@
 }
 
 .detail-header {
-  background-color: #6a1b9a;
+  background-color: #C33764;
   color: white;
   padding: 18px 25px;
   display: flex;
@@ -921,7 +925,7 @@
   font-weight: 500;
 }
 
-.detail-actions {
+detail-actions {
   display: flex;
   gap: 12px;
 }
@@ -945,7 +949,7 @@
 }
 
 .info-section h3 {
-  color: #6a1b9a;
+  color: #C33764;
   font-size: 1.2rem;
   margin-bottom: 20px;
   font-weight: 500;
@@ -993,29 +997,29 @@
 
 .status-completed, .status-approved {
   background-color: #e8f5e9;
-  color: #4caf50;
+  color: #1D2671;
 }
 
 .status-completed::before, .status-approved::before {
-  background-color: #4caf50;
+  background-color: #1D2671;
 }
 
 .status-pending {
   background-color: #fff3e0;
-  color: #ff9800;
+  color: #C33764;
 }
 
 .status-pending::before {
-  background-color: #ff9800;
+  background-color: #C33764;
 }
 
 .status-active {
-  background-color: #e3f2fd;
-  color: #2196f3;
+  background-color: #deacbc61;
+  color: #C33764;
 }
 
 .status-active::before {
-  background-color: #2196f3;
+  background-color: #1D2671;
 }
 
 .status-rejected {
@@ -1051,8 +1055,8 @@
 }
 
 .transaction-type.deposit {
-  background-color: #e3f2fd;
-  color: #2196f3;
+  background-color: #deacbc61;
+  color: #C33764;
 }
 
 .transaction-type.withdrawal {
@@ -1062,7 +1066,7 @@
 
 .transaction-type.winning {
   background-color: #e8f5e9;
-  color: #4caf50;
+  color: #1D2671;
 }
 
 .transaction-date {
@@ -1097,7 +1101,7 @@
 }
 
 .position-1 {
-  background-color: #FFD700; /* Gold */
+  background-color: #C33764; /* Gold */
 }
 
 .position-2 {
@@ -1147,7 +1151,7 @@
 
 /* Improve detail header spacing */
 .detail-header {
-  background-color: #6a1b9a;
+  background-color: #1a1a1a;
   color: white;
   padding: 18px 25px;
   display: flex;
@@ -1180,7 +1184,7 @@
 }
 
 .info-section h3 {
-  color: #6a1b9a;
+  color: #1a1a1a;
   font-size: 1.2rem;
   margin-bottom: 20px;
   font-weight: 500;
@@ -1199,13 +1203,13 @@
   gap: 6px;
   padding: 1px 1px;
   border-radius: 6px;
-  background-color: #ffffff00;
-  color: #6a1b9a;
+  background-color: linear-gradient(135deg, #C33764 , #1D2671);
+  color: #C33764;
   transition: all 0.2s ease;
 }
 
 .dropdown-toggle:hover {
-  background-color: #ede7f6;
+  background-color: linear-gradient(135deg, #C33764 , #1D2671);
 }
 
 .dropdown-toggle .icon {
@@ -1244,6 +1248,93 @@
 }
 
 .dropdown-item:hover {
-  background-color: #f5f0ff;
-  color: #6a1b9a;
+  background-color: #c390a03e;
+  color: #C33764;
+}
+
+/* Improved button styles for better alignment and consistent colors */
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 120px;
+  white-space: nowrap;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  text-align: center;
+  font-weight: 500;
+  padding: 10px 16px;
+}
+
+.btn-primary.admin-btn {
+  background-color: var(--primary, #1D2671);
+  color: white;
+  border: none;
+}
+
+.btn-primary.admin-btn:hover {
+  background-color: var(--primary-dark, #3A5FC9);
+}
+
+.btn-outline.admin-btn {
+  background-color: transparent;
+  color: var(--primary, #1D2671);
+  border: 1px solid var(--primary, #1D2671);
+}
+
+.btn-outline.admin-btn:hover {
+  background-color: rgba(86, 128, 233, 0.1);
+  transform: translateY(-2px);
+}
+
+.btn-sm.admin-btn {
+  padding: 8px 12px;
+  min-width: 80px;
+  font-size: 0.85rem;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.admin-draw-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.center-btn {
+  margin: 0 auto;
+}
+
+.admin-list-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .admin-actions {
+    margin-top: 16px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .admin-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .admin-btn {
+    width: 100%;
+  }
+  
+  .admin-list-actions .admin-btn {
+    min-width: 70px;
+  }
 }

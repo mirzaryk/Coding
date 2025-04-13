@@ -10,7 +10,8 @@ import {
   updateDoc, 
   serverTimestamp,
   limit,
-  setDoc
+  setDoc,
+  deleteDoc
 } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { toast } from 'react-toastify';
@@ -29,7 +30,9 @@ import {
   FaPhone,
   FaCalendarAlt,
   FaChartLine,
-  FaMoneyBillWave
+  FaMoneyBillWave,
+  FaTrash,
+  FaExclamationTriangle
 } from 'react-icons/fa';
 import './AdminUsers.css';
 
@@ -43,12 +46,12 @@ function AdminUsers() {
   const [filter, setFilter] = useState('all'); // all, active, inactive
   const [isProcessing, setIsProcessing] = useState(false);
   const [manualCreditAmount, setManualCreditAmount] = useState('');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
     const loadUsers = async () => {
       try {
-        // Create the appropriate query based on filter
         let usersQuery;
         if (filter === 'active') {
           usersQuery = query(
@@ -77,14 +80,12 @@ function AdminUsers() {
         
         setUsers(usersData);
         
-        // Apply search query filter
         if (searchQuery) {
           filterUsers(usersData, searchQuery);
         } else {
           setFilteredUsers(usersData);
         }
         
-        // Check if we should select a specific user from URL params
         const params = new URLSearchParams(location.search);
         const userId = params.get('id');
         
@@ -173,11 +174,9 @@ function AdminUsers() {
         updatedAt: serverTimestamp()
       });
       
-      // Update the user in state
       const updatedUser = { ...selectedUser, status };
       setSelectedUser(updatedUser);
       
-      // Update in the lists
       setUsers(prevUsers => prevUsers.map(user => 
         user.id === selectedUser.id ? updatedUser : user
       ));
@@ -197,7 +196,6 @@ function AdminUsers() {
 
   const handleManualCreditChange = (e) => {
     const value = e.target.value;
-    // Allow only numbers and decimals
     if (/^-?\d*\.?\d*$/.test(value)) {
       setManualCreditAmount(value);
     }
@@ -216,7 +214,6 @@ function AdminUsers() {
     setIsProcessing(true);
     
     try {
-      // First get the latest user data to ensure we have the correct balance
       const userRef = doc(db, 'users', selectedUser.id);
       const userSnap = await getDoc(userRef);
       
@@ -229,13 +226,11 @@ function AdminUsers() {
       const currentBalance = userData.balance || 0;
       const newBalance = currentBalance + amount;
       
-      // Update user balance
       await updateDoc(userRef, {
         balance: newBalance,
         updatedAt: serverTimestamp()
       });
       
-      // Add transaction record
       const transactionType = amount > 0 ? 'manual-credit' : 'manual-debit';
       const transactionRef = doc(collection(db, 'transactions'));
       await setDoc(transactionRef, {
@@ -248,11 +243,9 @@ function AdminUsers() {
         timestamp: serverTimestamp()
       });
       
-      // Update the user in state
       const updatedUser = { ...selectedUser, balance: newBalance };
       setSelectedUser(updatedUser);
       
-      // Update in the lists
       setUsers(prevUsers => prevUsers.map(user => 
         user.id === selectedUser.id ? updatedUser : user
       ));
@@ -261,10 +254,8 @@ function AdminUsers() {
         user.id === selectedUser.id ? updatedUser : user
       ));
       
-      // Refresh transactions
       loadUserTransactions(selectedUser.id);
       
-      // Reset amount
       setManualCreditAmount('');
       
       toast.success(`${amount > 0 ? 'Credit' : 'Debit'} of ${Math.abs(amount)} successfully applied to user`);
@@ -276,7 +267,30 @@ function AdminUsers() {
     }
   };
 
-  // Helper to format date
+  const handleDeleteUser = async () => {
+    if (!selectedUser) return;
+    
+    setIsProcessing(true);
+    
+    try {
+      const userRef = doc(db, 'users', selectedUser.id);
+      await deleteDoc(userRef);
+      
+      setUsers(prevUsers => prevUsers.filter(user => user.id !== selectedUser.id));
+      setFilteredUsers(prevUsers => prevUsers.filter(user => user.id !== selectedUser.id));
+      
+      setSelectedUser(null);
+      
+      toast.success('User has been permanently deleted');
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Failed to delete user");
+    } finally {
+      setIsProcessing(false);
+      setShowDeleteConfirm(false);
+    }
+  };
+
   const formatDate = (timestamp) => {
     if (!timestamp) return 'N/A';
     
@@ -284,7 +298,6 @@ function AdminUsers() {
     return date.toLocaleString();
   };
 
-  // Format currency
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-PK', {
       style: 'currency',
@@ -313,6 +326,38 @@ function AdminUsers() {
         <div className="admin-header">
           <h1 className="admin-title">User Management</h1>
         </div>
+        
+        {showDeleteConfirm && (
+          <div className="delete-confirm-overlay">
+            <div className="delete-confirm-dialog">
+              <div className="delete-confirm-header">
+                <FaExclamationTriangle className="warning-icon" />
+                <h3>Delete User</h3>
+              </div>
+              <div className="delete-confirm-body">
+                <p>Are you sure you want to permanently delete this user?</p>
+                <p className="user-to-delete">{selectedUser?.name || selectedUser?.email}</p>
+                <p className="warning-text">This action cannot be undone and will remove all user data!</p>
+              </div>
+              <div className="delete-confirm-actions">
+                <button 
+                  className="btn btn-secondary"
+                  onClick={() => setShowDeleteConfirm(false)}
+                  disabled={isProcessing}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className="btn btn-danger"
+                  onClick={handleDeleteUser}
+                  disabled={isProcessing}
+                >
+                  {isProcessing ? 'Deleting...' : 'Delete Permanently'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         
         <div className="users-filters-wrapper">
           <div className="search-box">
@@ -376,15 +421,28 @@ function AdminUsers() {
                         </td>
                         <td className="user-balance">{formatCurrency(user.balance || 0)}</td>
                         <td>
-                          <button 
-                            className="btn btn-sm btn-outline view-btn"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleSelectUser(user);
-                            }}
-                          >
-                            <FaEye className="btn-icon" /> View
-                          </button>
+                          <div className="user-actions">
+                            <button 
+                              className="btn btn-sm btn-outline view-btn"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleSelectUser(user);
+                              }}
+                            >
+                              <FaEye className="btn-icon" /> View
+                            </button>
+                            <button 
+                              className="btn btn-sm btn-outline-danger delete-btn"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedUser(user);
+                                setShowDeleteConfirm(true);
+                              }}
+                              disabled={isProcessing}
+                            >
+                              <FaTrash className="btn-icon" /> Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                       {selectedUser?.id === user.id && (
@@ -415,7 +473,6 @@ function AdminUsers() {
                               </div>
                               
                               <div className="detail-content">
-                                {/* User profile content - unchanged */}
                                 <div className="user-profile-header">
                                   <div className="user-profile-avatar" style={{backgroundColor: getAvatarColor(selectedUser.name || selectedUser.email)}}>
                                     {getInitials(selectedUser.name || selectedUser.email)}
@@ -501,7 +558,6 @@ function AdminUsers() {
                                     )}
                                   </h3>
                                   
-                                  {/* Transactions section - unchanged */}
                                   {userTransactions.length > 0 ? (
                                     <div className="transactions-list">
                                       {userTransactions.map(transaction => (
@@ -555,7 +611,6 @@ function AdminUsers() {
   );
 }
 
-// Helper function to get user initials for avatar
 function getInitials(name) {
   if (!name) return '?';
   
@@ -564,17 +619,15 @@ function getInitials(name) {
   return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
 }
 
-// Helper function to generate consistent avatar colors
 function getAvatarColor(seed) {
   const colors = [
-    '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', 
-    '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A',
-    '#CDDC39', '#FFC107', '#FF9800', '#FF5722', '#795548'
+    '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#C33764', 
+    '#03A9F4', '#00BCD4', '#009688', '#C33764', '#8BC34A',
+    '#CDDC39', '#FFC107', '#C33764', '#FF5722', '#795548'
   ];
   
   if (!seed) return colors[0];
   
-  // Simple hash function to get consistent color
   const hashCode = seed
     .split('')
     .reduce((acc, char) => acc + char.charCodeAt(0), 0);
@@ -582,7 +635,6 @@ function getAvatarColor(seed) {
   return colors[hashCode % colors.length];
 }
 
-// Helper function to format transaction types
 function formatTransactionType(type) {
   switch (type) {
     case 'draw-entry': return 'Draw Entry';

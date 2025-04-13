@@ -1,27 +1,21 @@
 .draw-card {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow);
   overflow: hidden;
-  margin-bottom: 30px;
+  margin-bottom: 2rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .draw-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
-
-.draw-card.no-draw {
-  text-align: center;
-  padding: 30px;
-  background-color: #f9f9f9;
+  box-shadow: var(--box-shadow-hover);
 }
 
 .draw-card-header {
-  background-color: #6a1b9a;
+  background: var(--main-gradient);
+  padding: 1.5rem;
   color: white;
-  padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -29,140 +23,164 @@
 
 .draw-card-header h3 {
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
+  font-weight: 600;
 }
 
 .draw-status {
-  background-color: #4caf50;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: bold;
-}
-
-.draw-status:contains('Paused') {
-  background-color: #ff9800;
-}
-
-.draw-paused-message {
-  color: #ff9800;
-  font-style: italic;
-  margin-top: 10px;
-  font-size: 0.9rem;
-  text-align: center;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
 .draw-card-body {
-  padding: 20px;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.draw-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 }
 
 .draw-info p {
-  margin: 10px 0;
-  font-size: 1rem;
+  margin: 0;
+  line-height: 1.5;
+  display: flex;
+  justify-content: space-between;
+}
+
+.draw-info p strong {
+  color: var(--text-primary);
 }
 
 .prize-breakdown {
-  margin-top: 20px;
-  border-top: 1px solid #eee;
-  padding-top: 20px;
+  border-left: 1px solid #eee;
+  padding-left: 2rem;
 }
 
 .prize-breakdown h4 {
-  margin-bottom: 15px;
-  color: #6a1b9a;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: --primary-dark;
+  font-size: 1.2rem;
 }
 
 .prize-breakdown ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .prize-breakdown li {
-  margin-bottom: 10px;
-  padding-left: 20px;
-  position: relative;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed #eee;
+  display: flex;
+  justify-content: space-between;
 }
 
-.prize-breakdown li:before {
-  content: '•';
-  position: absolute;
-  left: 0;
-  color: #f50057;
-}
-
-.prize-pool-note {
-  font-size: 0.8rem;
-  color: #666;
-  margin-top: 10px;
-  border-top: 1px dashed #eee;
-  padding-top: 10px;
+.prize-breakdown li:last-child {
+  border-bottom: none;
 }
 
 .draw-card-footer {
-  padding: 15px 20px;
   background-color: #f9f9f9;
-  text-align: center;
-}
-
-.enter-draw-btn {
-  width: 100%;
-  padding: 12px;
-  font-size: 1rem;
-  font-weight: bold;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #eee;
 }
 
 .entry-controls {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  width: 100%;
+  gap: 1rem;
 }
 
 .entry-count-container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .entry-count-container label {
   font-weight: 500;
-  color: #555;
+  color: var(--text-primary);
 }
 
 .entry-count-input {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 1rem;
 }
 
 .entry-count-input input {
   width: 80px;
-  padding: 8px 12px;
+  padding: 0.7rem;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: var(--border-radius-sm);
   font-size: 1rem;
-  text-align: center;
 }
 
 .entry-fee-total {
-  font-weight: bold;
-  color: #6a1b9a;
+  font-weight: 600;
+  color: --primary-dark;
+}
+
+.enter-draw-btn {
+  background: var(--main-gradient);
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  width: 100%;
+  font-size: 1.1rem;
+  box-shadow: 0 5px 15px rgba(195, 55, 100, 0.3);
+}
+
+.enter-draw-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(195, 55, 100, 0.4);
+}
+
+.enter-draw-btn:disabled {
+  background: linear-gradient(135deg, #ccc, #999);
+  cursor: not-allowed;
+}
+
+.draw-paused-message {
+  color: var(--error);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.no-draw {
+  text-align: center;
+  padding: 3rem;
+}
+
+.no-draw h3 {
+  color: --primary-dark;
+  margin-bottom: 1rem;
 }
 
 @media screen and (max-width: 768px) {
-  .draw-card-header {
-    flex-direction: column;
-    align-items: flex-start;
+  .draw-card-body {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
   
-  .draw-status {
-    margin-top: 10px;
-  }
-  
-  .entry-count-input {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+  .prize-breakdown {
+    border-left: none;
+    border-top: 1px solid #eee;
+    padding-left: 0;
+    padding-top: 1.5rem;
   }
 }

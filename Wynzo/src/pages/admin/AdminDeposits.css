@@ -10,7 +10,7 @@
 
 .deposit-amount {
   font-weight: 600;
-  color: #6a1b9a;
+  color: #1D2671; /* Changed to primary blue */
 }
 
 /* Status banner for different states */
@@ -46,12 +46,12 @@
 }
 
 .deposit-status-banner.status-completed .status-icon {
-  background-color: #4caf50;
+  background-color: #C33764;
   color: white;
 }
 
 .deposit-status-banner.status-processing .status-icon {
-  background-color: #ff9800;
+  background-color: #C33764;
   color: white;
 }
 
@@ -106,15 +106,15 @@
   display: inline-flex;
   align-items: center;
   padding: 6px 12px;
-  background-color: #f5f0ff;
-  color: #6a1b9a;
+  background-color: #ECF2FE; /* Lighter shade of primary blue */
+  color: #1D2671; /* Changed to primary blue */
   border-radius: 4px;
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .view-receipt-btn:hover {
-  background-color: #e9dcff;
+  background-color: #DBE8FD; /* Slightly darker shade for hover */
   text-decoration: none;
 }
 

@@ -28,6 +28,8 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
+import Referrals from './pages/Referrals'; // Import the Referral component
+import AdminReferrals from './pages/admin/AdminReferrals'; // Import the AdminReferrals component
 
 function App() {
   const { currentUser } = useAuth();
@@ -62,6 +64,11 @@ function App() {
           <Route path="/my-entries" element={
             <ProtectedRoute>
               <UserEntries />
+            </ProtectedRoute>
+          } />
+          <Route path="/referrals" element={
+            <ProtectedRoute>
+              <Referrals />
             </ProtectedRoute>
           } />
           <Route path="/wallet" element={
@@ -107,6 +114,11 @@ function App() {
           <Route path="/admin/tasks" element={
             <AdminRoute>
               <AdminTasks />
+            </AdminRoute>
+          } />
+          <Route path="/admin/referrals" element={
+            <AdminRoute>
+              <AdminReferrals />
             </AdminRoute>
           } />
           <Route path="/admin/users/:userId?" element={

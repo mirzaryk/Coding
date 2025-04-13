@@ -151,7 +151,7 @@ function AdminTasks() {
           { id: 'task7', title: 'Follow Facebook Page', description: 'Follow our official Facebook page', type: 'facebook', enabled: true, order: 7 },
           { id: 'task8', title: 'Follow Instagram Page', description: 'Follow our official Instagram page', type: 'instagram', enabled: true, order: 8 },
           { id: 'task9', title: 'Follow Twitter Page', description: 'Follow our official Twitter page', type: 'twitter', enabled: true, order: 9 },
-          { id: 'task10', title: 'Refer a Friend', description: 'Invite a friend to join Wynzo (requires verification)', type: 'refer', enabled: true, order: 10, verificationRequired: true }
+          { id: 'task10', title: 'Refer a Friend', description: 'Invite a friend to join Wynzo (requires verification)', type: 'refer', enabled: true, order: 10, verificationRequired: true, referralCount: 1 }
         ];
         
         await setDoc(tasksRef, {
@@ -209,7 +209,10 @@ function AdminTasks() {
 
   const handleStartEdit = (task) => {
     setEditingTask({
-      ...task
+      ...task,
+      targetUrl: task.type !== 'refer' ? (task.targetUrl || '') : '',
+      popupTime: task.type !== 'refer' ? (task.popupTime || 30) : 0,
+      referralCount: task.type === 'refer' ? (task.referralCount || 1) : 0
     });
   };
 
@@ -220,7 +223,7 @@ function AdminTasks() {
   const handleInputChange = (e, field) => {
     setEditingTask(prev => ({
       ...prev,
-      [field]: e.target.value
+      [field]: field === 'popupTime' || field === 'referralCount' ? parseInt(e.target.value) || 0 : e.target.value
     }));
   };
 
@@ -315,17 +318,17 @@ function AdminTasks() {
       
       if (tasksDoc.exists()) {
         const tasksData = tasksDoc.data();
-        let tasksList = tasksList.filter(task => task.id !== taskToDelete.id);
+        let updatedTasks = tasksData.tasks.filter(task => task.id !== taskToDelete.id);
         
         // Re-order remaining tasks
-        tasksList = tasksList.map((task, index) => ({
+        updatedTasks = updatedTasks.map((task, index) => ({
           ...task,
           order: index + 1
         }));
         
         // Save to Firestore
         await updateDoc(tasksRef, {
-          tasks: tasksList,
+          tasks: updatedTasks,
           lastUpdated: serverTimestamp(),
           updatedBy: currentUser.uid,
           updateType: 'delete',
@@ -333,8 +336,8 @@ function AdminTasks() {
         });
         
         // Update local state
-        setTasks(tasksList);
-        applyFilters(tasksList, taskFilter, typeFilter);
+        setTasks(updatedTasks);
+        applyFilters(updatedTasks, taskFilter, typeFilter);
         setTaskToDelete(null);
         setShowConfirmDelete(false);
         
@@ -359,14 +362,17 @@ function AdminTasks() {
       type: 'youtube',
       enabled: true,
       order: tasks.length + 1,
-      verificationRequired: false
+      verificationRequired: false,
+      targetUrl: '', // Add target URL field
+      popupTime: 30, // Default popup time in seconds
+      referralCount: 1 // Default number of referrals needed
     });
   };
 
   const handleNewTaskInputChange = (e, field) => {
     setNewTask(prev => ({
       ...prev,
-      [field]: e.target.value
+      [field]: field === 'popupTime' || field === 'referralCount' ? parseInt(e.target.value) || 0 : e.target.value
     }));
   };
 
@@ -601,7 +607,7 @@ function AdminTasks() {
               onClick={handleCreateNewTask}
               disabled={isProcessing}
             >
-              <FaPlus className="btn-icon" /> Add New Task
+              <FaPlus className="btn-icon" /> <span className="btn-text">Add New Task</span>
             </button>
           </div>
         </div>
@@ -629,6 +635,25 @@ function AdminTasks() {
                 rows="2"
               />
             </div>
+            <div className="form-group">
+              <label>Target URL</label>
+              {newTask.type !== 'refer' ? (
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  value={newTask.targetUrl} 
+                  onChange={(e) => handleNewTaskInputChange(e, 'targetUrl')}
+                  placeholder="Enter the target URL for this task"
+                />
+              ) : (
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  value="Not applicable for referral tasks" 
+                  disabled
+                />
+              )}
+            </div>
             <div className="form-row">
               <div className="form-group form-group-half">
                 <label>Task Type</label>
@@ -654,25 +679,54 @@ function AdminTasks() {
               </div>
             </div>
             <div className="form-row">
-              <div className="form-group checkbox-group">
-                <label className="checkbox-container">
-                  <input 
-                    type="checkbox" 
-                    checked={newTask.enabled} 
-                    onChange={handleToggleNewTaskEnabled} 
-                  />
-                  <span className="checkbox-label">Enable Task</span>
-                </label>
+              <div className="form-group form-group-half">
+                {newTask.type === 'refer' ? (
+                  <>
+                    <label>Referrals Required</label>
+                    <input 
+                      type="number" 
+                      className="form-control" 
+                      value={newTask.referralCount || 1} 
+                      onChange={(e) => handleNewTaskInputChange(e, 'referralCount')}
+                      min="1"
+                      max="100"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <label>Popup Display Time (seconds)</label>
+                    <input 
+                      type="number" 
+                      className="form-control" 
+                      value={newTask.popupTime} 
+                      onChange={(e) => handleNewTaskInputChange(e, 'popupTime')}
+                      min="5"
+                      max="300"
+                    />
+                  </>
+                )}
               </div>
-              <div className="form-group checkbox-group">
-                <label className="checkbox-container">
-                  <input 
-                    type="checkbox" 
-                    checked={newTask.verificationRequired} 
-                    onChange={handleToggleNewTaskVerification} 
-                  />
-                  <span className="checkbox-label">Requires Verification</span>
-                </label>
+              <div className="form-group form-group-half checkbox-group-container">
+                <div className="form-group checkbox-group">
+                  <label className="checkbox-container">
+                    <input 
+                      type="checkbox" 
+                      checked={newTask.enabled} 
+                      onChange={handleToggleNewTaskEnabled} 
+                    />
+                    <span className="checkbox-label">Enable Task</span>
+                  </label>
+                </div>
+                <div className="form-group checkbox-group">
+                  <label className="checkbox-container">
+                    <input 
+                      type="checkbox" 
+                      checked={newTask.verificationRequired} 
+                      onChange={handleToggleNewTaskVerification} 
+                    />
+                    <span className="checkbox-label">Requires Verification</span>
+                  </label>
+                </div>
               </div>
             </div>
             <div className="form-actions">
@@ -681,7 +735,7 @@ function AdminTasks() {
                 onClick={handleCancelNewTask}
                 disabled={isProcessing}
               >
-                <FaTimes className="btn-icon" /> Cancel
+                <FaTimes className="btn-icon" /> <span className="btn-text">Cancel</span>
               </button>
               <button 
                 className="btn btn-primary" 
@@ -690,7 +744,7 @@ function AdminTasks() {
               >
                 {isProcessing ? 'Saving...' : (
                   <>
-                    <FaSave className="btn-icon" /> Save Task
+                    <FaSave className="btn-icon" /> <span className="btn-text">Save Task</span>
                   </>
                 )}
               </button>
@@ -769,8 +823,24 @@ function AdminTasks() {
                               rows="2"
                             />
                           </div>
-                          <div className="form-row">
+                          
+                          {/* Show Target URL only for non-referral tasks */}
+                          {editingTask.type !== 'refer' && (
                             <div className="form-group">
+                              <label>Target URL</label>
+                              <input 
+                                type="text" 
+                                className="form-control" 
+                                value={editingTask.targetUrl || ''} 
+                                onChange={(e) => handleInputChange(e, 'targetUrl')}
+                                placeholder="Enter target URL"
+                              />
+                            </div>
+                          )}
+                          
+                          <div className="form-row">
+                            <div className="form-group form-group-half">
+                              <label>Task Type</label>
                               <select 
                                 className="form-control" 
                                 value={editingTask.type} 
@@ -781,7 +851,38 @@ function AdminTasks() {
                                 ))}
                               </select>
                             </div>
+                            
+                            {/* Show either Popup Time or Referral Count based on task type */}
+                            <div className="form-group form-group-half">
+                              {editingTask.type === 'refer' ? (
+                                <>
+                                  <label>Referrals Required</label>
+                                  <input 
+                                    type="number" 
+                                    className="form-control" 
+                                    value={editingTask.referralCount || 1} 
+                                    onChange={(e) => handleInputChange(e, 'referralCount')}
+                                    min="1"
+                                    max="100"
+                                  />
+                                </>
+                              ) : (
+                                <>
+                                  <label>Popup Time (seconds)</label>
+                                  <input 
+                                    type="number" 
+                                    className="form-control" 
+                                    value={editingTask.popupTime || 30} 
+                                    onChange={(e) => handleInputChange(e, 'popupTime')}
+                                    min="5"
+                                    max="300"
+                                  />
+                                </>
+                              )}
+                            </div>
                           </div>
+                          
+                          {/* Rest of the form remains unchanged */}
                           <div className="form-row checkbox-row">
                             <label className="checkbox-container">
                               <input 
@@ -805,6 +906,15 @@ function AdminTasks() {
                         <div className="task-details">
                           <h4 className="task-title">{task.title}</h4>
                           <p className="task-description">{task.description}</p>
+                          {task.type === 'refer' && task.referralCount && (
+                            <p className="task-referral-count">Required Referrals: {task.referralCount}</p>
+                          )}
+                          {task.type !== 'refer' && task.targetUrl && (
+                            <p className="task-url">URL: {task.targetUrl}</p>
+                          )}
+                          {task.type !== 'refer' && task.popupTime && (
+                            <p className="task-popup-time">Popup Time: {task.popupTime}s</p>
+                          )}
                           {task.verificationRequired && (
                             <span className="verification-badge">Requires Verification</span>
                           )}
@@ -824,7 +934,7 @@ function AdminTasks() {
                             onClick={handleCancelEdit}
                             disabled={isProcessing}
                           >
-                            <FaTimes className="btn-icon" /> Cancel
+                            <FaTimes className="btn-icon" /> <span className="btn-text">Cancel</span>
                           </button>
                           <button 
                             className="btn btn-sm btn-primary" 
@@ -833,7 +943,7 @@ function AdminTasks() {
                           >
                             {isProcessing ? 'Saving...' : (
                               <>
-                                <FaSave className="btn-icon" /> Save
+                                <FaSave className="btn-icon" /> <span className="btn-text">Save</span>
                               </>
                             )}
                           </button>
@@ -845,14 +955,14 @@ function AdminTasks() {
                             onClick={() => handleStartEdit(task)}
                             disabled={isProcessing}
                           >
-                            <FaEdit className="btn-icon" /> Edit
+                            <FaEdit className="btn-icon" /> <span className="btn-text">Edit</span>
                           </button>
                           <button 
                             className="btn btn-sm btn-danger" 
                             onClick={() => handleDeleteTaskConfirm(task)}
                             disabled={isProcessing}
                           >
-                            <FaTrash className="btn-icon" /> Delete
+                            <FaTrash className="btn-icon" /> <span className="btn-text">Delete</span>
                           </button>
                         </div>
                       )}
@@ -908,14 +1018,14 @@ function AdminTasks() {
                 onClick={handleDeleteTaskCancel}
                 disabled={isProcessing}
               >
-                Cancel
+                <span className="btn-text">Cancel</span>
               </button>
               <button 
                 className="btn btn-danger" 
                 onClick={handleDeleteTask}
                 disabled={isProcessing}
               >
-                {isProcessing ? 'Deleting...' : 'Delete Task'}
+                {isProcessing ? <span className="btn-text">Deleting...</span> : <span className="btn-text">Delete Task</span>}
               </button>
             </div>
           </div>
